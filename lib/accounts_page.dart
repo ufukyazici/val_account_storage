@@ -62,88 +62,172 @@ class _AccountsPageState extends State<AccountsPage> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-              builder: (context) {
-                return Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Form(
-                    key: _key,
-                    autovalidateMode: AutovalidateMode.always,
-                    child: Column(
-                      children: [
-                        TextFormField(
+      persistentFooterButtons: [
+        FloatingActionButton.extended(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                builder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Form(
+                      key: _key,
+                      autovalidateMode: AutovalidateMode.always,
+                      child: ListView(
+                        children: [
+                          TextFormField(
+                              validator: FormFieldValidator().isNotEmpty,
+                              controller: _usernameController,
+                              decoration: InputDecoration(labelText: LanguageItems.username)),
+                          TextFormField(
+                              validator: FormFieldValidator().isNotEmpty,
+                              controller: _passwordController,
+                              decoration: InputDecoration(labelText: LanguageItems.password)),
+                          TextFormField(
+                              validator: FormFieldValidator().isNotEmpty,
+                              controller: _mailController,
+                              decoration: InputDecoration(labelText: LanguageItems.mail)),
+                          TextFormField(
+                              validator: FormFieldValidator().isNotEmpty,
+                              controller: _mailPasswordController,
+                              decoration: InputDecoration(labelText: LanguageItems.mailPassword)),
+                          TextFormField(
+                              validator: FormFieldValidator().isNotEmpty,
+                              controller: _dobController,
+                              decoration: InputDecoration(labelText: LanguageItems.dob)),
+                          DropdownButtonFormField(
+                            hint: const Text("Rank"),
                             validator: FormFieldValidator().isNotEmpty,
-                            controller: _usernameController,
-                            decoration: InputDecoration(labelText: LanguageItems.username)),
-                        TextFormField(
-                            validator: FormFieldValidator().isNotEmpty,
-                            controller: _passwordController,
-                            decoration: InputDecoration(labelText: LanguageItems.password)),
-                        TextFormField(
-                            validator: FormFieldValidator().isNotEmpty,
-                            controller: _mailController,
-                            decoration: InputDecoration(labelText: LanguageItems.mail)),
-                        TextFormField(
-                            validator: FormFieldValidator().isNotEmpty,
-                            controller: _mailPasswordController,
-                            decoration: InputDecoration(labelText: LanguageItems.mailPassword)),
-                        TextFormField(
-                            validator: FormFieldValidator().isNotEmpty,
-                            controller: _dobController,
-                            decoration: InputDecoration(labelText: LanguageItems.dob)),
-                        DropdownButtonFormField(
-                          hint: const Text("Rank"),
-                          validator: FormFieldValidator().isNotEmpty,
-                          items: [
-                            DropdownMenuItem(value: "Diamond-1", child: Text(LanguageItems.diamond1)),
-                            DropdownMenuItem(value: "Diamond-2", child: Text(LanguageItems.diamond2)),
-                            DropdownMenuItem(value: "Diamond-3", child: Text(LanguageItems.diamond3)),
-                            DropdownMenuItem(value: "Ascendant-1", child: Text(LanguageItems.ascendant1)),
-                            DropdownMenuItem(value: "Ascendant-2", child: Text(LanguageItems.ascendant2)),
-                            DropdownMenuItem(value: "Ascendant-3", child: Text(LanguageItems.ascendant3)),
-                            DropdownMenuItem(value: "Immortal-1", child: Text(LanguageItems.immortal1)),
-                            DropdownMenuItem(value: "Immortal-2", child: Text(LanguageItems.immortal2)),
-                            DropdownMenuItem(value: "Immortal-3", child: Text(LanguageItems.immortal3)),
-                            DropdownMenuItem(value: "Radiant", child: Text(LanguageItems.radiant)),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              _rank = value ?? "";
-                            });
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 22.0),
-                          child: ElevatedButton.icon(
-                              onPressed: () {
-                                if (_key.currentState?.validate() ?? false) {
-                                  accounts.add(AccountModel(
-                                      username: _usernameController.text,
-                                      password: _passwordController.text,
-                                      mail: _mailController.text,
-                                      mailPassword: _mailPasswordController.text,
-                                      dob: _dobController.text,
-                                      rank: _rank));
-                                  accountCacheManager.saveAccounts(accounts);
-                                  resetControllers();
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                              icon: const Icon(Icons.save_outlined),
-                              label: Text(LanguageItems.save)),
-                        )
-                      ],
+                            items: [
+                              DropdownMenuItem(value: "Diamond-1", child: Text(LanguageItems.diamond1)),
+                              DropdownMenuItem(value: "Diamond-2", child: Text(LanguageItems.diamond2)),
+                              DropdownMenuItem(value: "Diamond-3", child: Text(LanguageItems.diamond3)),
+                              DropdownMenuItem(value: "Ascendant-1", child: Text(LanguageItems.ascendant1)),
+                              DropdownMenuItem(value: "Ascendant-2", child: Text(LanguageItems.ascendant2)),
+                              DropdownMenuItem(value: "Ascendant-3", child: Text(LanguageItems.ascendant3)),
+                              DropdownMenuItem(value: "Immortal-1", child: Text(LanguageItems.immortal1)),
+                              DropdownMenuItem(value: "Immortal-2", child: Text(LanguageItems.immortal2)),
+                              DropdownMenuItem(value: "Immortal-3", child: Text(LanguageItems.immortal3)),
+                              DropdownMenuItem(value: "Radiant", child: Text(LanguageItems.radiant)),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                _rank = value ?? "";
+                              });
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 22.0),
+                            child: ElevatedButton.icon(
+                                onPressed: () {
+                                  if (_key.currentState?.validate() ?? false) {
+                                    accounts.add(AccountModel(
+                                        username: _usernameController.text,
+                                        password: _passwordController.text,
+                                        mail: _mailController.text,
+                                        mailPassword: _mailPasswordController.text,
+                                        dob: _dobController.text,
+                                        rank: _rank));
+                                    accountCacheManager.saveAccounts(accounts);
+                                    resetControllers();
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                                icon: const Icon(Icons.save_outlined),
+                                label: Text(LanguageItems.save)),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          },
-          label: Text(LanguageItems.addAccount)),
+                  );
+                },
+              );
+            },
+            label: Text(LanguageItems.addAccount)),
+      ],
+      // floatingActionButton: FloatingActionButton.extended(
+      //     onPressed: () {
+      //       showModalBottomSheet(
+      //         context: context,
+      //         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      //         builder: (context) {
+      //           return Padding(
+      //             padding: const EdgeInsets.all(12.0),
+      //             child: Form(
+      //               key: _key,
+      //               autovalidateMode: AutovalidateMode.always,
+      //               child: ListView(
+      //                 children: [
+      //                   TextFormField(
+      //                       validator: FormFieldValidator().isNotEmpty,
+      //                       controller: _usernameController,
+      //                       decoration: InputDecoration(labelText: LanguageItems.username)),
+      //                   TextFormField(
+      //                       validator: FormFieldValidator().isNotEmpty,
+      //                       controller: _passwordController,
+      //                       decoration: InputDecoration(labelText: LanguageItems.password)),
+      //                   TextFormField(
+      //                       validator: FormFieldValidator().isNotEmpty,
+      //                       controller: _mailController,
+      //                       decoration: InputDecoration(labelText: LanguageItems.mail)),
+      //                   TextFormField(
+      //                       validator: FormFieldValidator().isNotEmpty,
+      //                       controller: _mailPasswordController,
+      //                       decoration: InputDecoration(labelText: LanguageItems.mailPassword)),
+      //                   TextFormField(
+      //                       validator: FormFieldValidator().isNotEmpty,
+      //                       controller: _dobController,
+      //                       decoration: InputDecoration(labelText: LanguageItems.dob)),
+      //                   DropdownButtonFormField(
+      //                     hint: const Text("Rank"),
+      //                     validator: FormFieldValidator().isNotEmpty,
+      //                     items: [
+      //                       DropdownMenuItem(value: "Diamond-1", child: Text(LanguageItems.diamond1)),
+      //                       DropdownMenuItem(value: "Diamond-2", child: Text(LanguageItems.diamond2)),
+      //                       DropdownMenuItem(value: "Diamond-3", child: Text(LanguageItems.diamond3)),
+      //                       DropdownMenuItem(value: "Ascendant-1", child: Text(LanguageItems.ascendant1)),
+      //                       DropdownMenuItem(value: "Ascendant-2", child: Text(LanguageItems.ascendant2)),
+      //                       DropdownMenuItem(value: "Ascendant-3", child: Text(LanguageItems.ascendant3)),
+      //                       DropdownMenuItem(value: "Immortal-1", child: Text(LanguageItems.immortal1)),
+      //                       DropdownMenuItem(value: "Immortal-2", child: Text(LanguageItems.immortal2)),
+      //                       DropdownMenuItem(value: "Immortal-3", child: Text(LanguageItems.immortal3)),
+      //                       DropdownMenuItem(value: "Radiant", child: Text(LanguageItems.radiant)),
+      //                     ],
+      //                     onChanged: (value) {
+      //                       setState(() {
+      //                         _rank = value ?? "";
+      //                       });
+      //                     },
+      //                   ),
+      //                   Padding(
+      //                     padding: const EdgeInsets.only(top: 22.0),
+      //                     child: ElevatedButton.icon(
+      //                         onPressed: () {
+      //                           if (_key.currentState?.validate() ?? false) {
+      //                             accounts.add(AccountModel(
+      //                                 username: _usernameController.text,
+      //                                 password: _passwordController.text,
+      //                                 mail: _mailController.text,
+      //                                 mailPassword: _mailPasswordController.text,
+      //                                 dob: _dobController.text,
+      //                                 rank: _rank));
+      //                             accountCacheManager.saveAccounts(accounts);
+      //                             resetControllers();
+      //                             Navigator.of(context).pop();
+      //                           }
+      //                         },
+      //                         icon: const Icon(Icons.save_outlined),
+      //                         label: Text(LanguageItems.save)),
+      //                   )
+      //                 ],
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //       );
+      //     },
+      //     label: Text(LanguageItems.addAccount)),
       body: ListView.builder(
         itemCount: accounts.length,
         itemBuilder: (context, index) {
