@@ -1,3 +1,4 @@
+import 'package:account_storage/accounts_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -8,6 +9,19 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    await Future.delayed(const Duration(seconds: 2));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const AccountsPage(),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
