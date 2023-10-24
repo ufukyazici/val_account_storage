@@ -17,6 +17,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Account Storage",
       debugShowCheckedModeBanner: false,
       theme: AccountsTheme().theme,
       home: const SplashPage(),

@@ -28,6 +28,31 @@ class _AccountsPageState extends State<AccountsPage> {
     initializeAndSave();
   }
 
+  void saveListItems() {
+    accounts.add(AccountModel(
+        username: _usernameController.text,
+        password: _passwordController.text,
+        mail: _mailController.text,
+        mailPassword: _mailPasswordController.text,
+        dob: _dobController.text,
+        rank: _rank));
+    accountCacheManager.saveAccounts(accounts);
+    resetControllers();
+    Navigator.of(context).pop();
+  }
+
+  void updateListItems(int index) {
+    accounts[index].username = _usernameController.text;
+    accounts[index].password = _passwordController.text;
+    accounts[index].mail = _mailController.text;
+    accounts[index].mailPassword = _mailPasswordController.text;
+    accounts[index].dob = _dobController.text;
+    accounts[index].rank = _rank;
+    accountCacheManager.saveAccounts(accounts);
+    resetControllers();
+    Navigator.of(context).pop();
+  }
+
   Future<void> initializeAndSave() async {
     accountCacheManager = AccountsSharedManager();
     await accountCacheManager.init();
@@ -65,169 +90,10 @@ class _AccountsPageState extends State<AccountsPage> {
       persistentFooterButtons: [
         FloatingActionButton.extended(
             onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-                builder: (context) {
-                  return Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Form(
-                      key: _key,
-                      autovalidateMode: AutovalidateMode.always,
-                      child: ListView(
-                        children: [
-                          TextFormField(
-                              validator: FormFieldValidator().isNotEmpty,
-                              controller: _usernameController,
-                              decoration: InputDecoration(labelText: LanguageItems.username)),
-                          TextFormField(
-                              validator: FormFieldValidator().isNotEmpty,
-                              controller: _passwordController,
-                              decoration: InputDecoration(labelText: LanguageItems.password)),
-                          TextFormField(
-                              validator: FormFieldValidator().isNotEmpty,
-                              controller: _mailController,
-                              decoration: InputDecoration(labelText: LanguageItems.mail)),
-                          TextFormField(
-                              validator: FormFieldValidator().isNotEmpty,
-                              controller: _mailPasswordController,
-                              decoration: InputDecoration(labelText: LanguageItems.mailPassword)),
-                          TextFormField(
-                              validator: FormFieldValidator().isNotEmpty,
-                              controller: _dobController,
-                              decoration: InputDecoration(labelText: LanguageItems.dob)),
-                          DropdownButtonFormField(
-                            hint: const Text("Rank"),
-                            validator: FormFieldValidator().isNotEmpty,
-                            items: [
-                              DropdownMenuItem(value: "Diamond-1", child: Text(LanguageItems.diamond1)),
-                              DropdownMenuItem(value: "Diamond-2", child: Text(LanguageItems.diamond2)),
-                              DropdownMenuItem(value: "Diamond-3", child: Text(LanguageItems.diamond3)),
-                              DropdownMenuItem(value: "Ascendant-1", child: Text(LanguageItems.ascendant1)),
-                              DropdownMenuItem(value: "Ascendant-2", child: Text(LanguageItems.ascendant2)),
-                              DropdownMenuItem(value: "Ascendant-3", child: Text(LanguageItems.ascendant3)),
-                              DropdownMenuItem(value: "Immortal-1", child: Text(LanguageItems.immortal1)),
-                              DropdownMenuItem(value: "Immortal-2", child: Text(LanguageItems.immortal2)),
-                              DropdownMenuItem(value: "Immortal-3", child: Text(LanguageItems.immortal3)),
-                              DropdownMenuItem(value: "Radiant", child: Text(LanguageItems.radiant)),
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                _rank = value ?? "";
-                              });
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 22.0),
-                            child: ElevatedButton.icon(
-                                onPressed: () {
-                                  if (_key.currentState?.validate() ?? false) {
-                                    accounts.add(AccountModel(
-                                        username: _usernameController.text,
-                                        password: _passwordController.text,
-                                        mail: _mailController.text,
-                                        mailPassword: _mailPasswordController.text,
-                                        dob: _dobController.text,
-                                        rank: _rank));
-                                    accountCacheManager.saveAccounts(accounts);
-                                    resetControllers();
-                                    Navigator.of(context).pop();
-                                  }
-                                },
-                                icon: const Icon(Icons.save_outlined),
-                                label: Text(LanguageItems.save)),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
+              _addAccountSheet(context);
             },
             label: Text(LanguageItems.addAccount)),
       ],
-      // floatingActionButton: FloatingActionButton.extended(
-      //     onPressed: () {
-      //       showModalBottomSheet(
-      //         context: context,
-      //         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      //         builder: (context) {
-      //           return Padding(
-      //             padding: const EdgeInsets.all(12.0),
-      //             child: Form(
-      //               key: _key,
-      //               autovalidateMode: AutovalidateMode.always,
-      //               child: ListView(
-      //                 children: [
-      //                   TextFormField(
-      //                       validator: FormFieldValidator().isNotEmpty,
-      //                       controller: _usernameController,
-      //                       decoration: InputDecoration(labelText: LanguageItems.username)),
-      //                   TextFormField(
-      //                       validator: FormFieldValidator().isNotEmpty,
-      //                       controller: _passwordController,
-      //                       decoration: InputDecoration(labelText: LanguageItems.password)),
-      //                   TextFormField(
-      //                       validator: FormFieldValidator().isNotEmpty,
-      //                       controller: _mailController,
-      //                       decoration: InputDecoration(labelText: LanguageItems.mail)),
-      //                   TextFormField(
-      //                       validator: FormFieldValidator().isNotEmpty,
-      //                       controller: _mailPasswordController,
-      //                       decoration: InputDecoration(labelText: LanguageItems.mailPassword)),
-      //                   TextFormField(
-      //                       validator: FormFieldValidator().isNotEmpty,
-      //                       controller: _dobController,
-      //                       decoration: InputDecoration(labelText: LanguageItems.dob)),
-      //                   DropdownButtonFormField(
-      //                     hint: const Text("Rank"),
-      //                     validator: FormFieldValidator().isNotEmpty,
-      //                     items: [
-      //                       DropdownMenuItem(value: "Diamond-1", child: Text(LanguageItems.diamond1)),
-      //                       DropdownMenuItem(value: "Diamond-2", child: Text(LanguageItems.diamond2)),
-      //                       DropdownMenuItem(value: "Diamond-3", child: Text(LanguageItems.diamond3)),
-      //                       DropdownMenuItem(value: "Ascendant-1", child: Text(LanguageItems.ascendant1)),
-      //                       DropdownMenuItem(value: "Ascendant-2", child: Text(LanguageItems.ascendant2)),
-      //                       DropdownMenuItem(value: "Ascendant-3", child: Text(LanguageItems.ascendant3)),
-      //                       DropdownMenuItem(value: "Immortal-1", child: Text(LanguageItems.immortal1)),
-      //                       DropdownMenuItem(value: "Immortal-2", child: Text(LanguageItems.immortal2)),
-      //                       DropdownMenuItem(value: "Immortal-3", child: Text(LanguageItems.immortal3)),
-      //                       DropdownMenuItem(value: "Radiant", child: Text(LanguageItems.radiant)),
-      //                     ],
-      //                     onChanged: (value) {
-      //                       setState(() {
-      //                         _rank = value ?? "";
-      //                       });
-      //                     },
-      //                   ),
-      //                   Padding(
-      //                     padding: const EdgeInsets.only(top: 22.0),
-      //                     child: ElevatedButton.icon(
-      //                         onPressed: () {
-      //                           if (_key.currentState?.validate() ?? false) {
-      //                             accounts.add(AccountModel(
-      //                                 username: _usernameController.text,
-      //                                 password: _passwordController.text,
-      //                                 mail: _mailController.text,
-      //                                 mailPassword: _mailPasswordController.text,
-      //                                 dob: _dobController.text,
-      //                                 rank: _rank));
-      //                             accountCacheManager.saveAccounts(accounts);
-      //                             resetControllers();
-      //                             Navigator.of(context).pop();
-      //                           }
-      //                         },
-      //                         icon: const Icon(Icons.save_outlined),
-      //                         label: Text(LanguageItems.save)),
-      //                   )
-      //                 ],
-      //               ),
-      //             ),
-      //           );
-      //         },
-      //       );
-      //     },
-      //     label: Text(LanguageItems.addAccount)),
       body: ListView.builder(
         itemCount: accounts.length,
         itemBuilder: (context, index) {
@@ -243,7 +109,27 @@ class _AccountsPageState extends State<AccountsPage> {
                 trailing: Wrap(children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined)),
+                    child: IconButton(
+                        onPressed: () {
+                          _usernameController.text = accounts[index].username ?? "";
+                          _passwordController.text = accounts[index].password ?? "";
+                          _mailController.text = accounts[index].mail ?? "";
+                          _mailPasswordController.text = accounts[index].mailPassword ?? "";
+                          _dobController.text = accounts[index].dob ?? "";
+                          _rank = accounts[index].rank ?? "";
+                          showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                            builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: _accountFormView(context, 1, index),
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.edit_outlined)),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -251,7 +137,7 @@ class _AccountsPageState extends State<AccountsPage> {
                         onPressed: () {
                           Clipboard.setData(ClipboardData(
                               text:
-                                  "Username : ${accounts[index].username} | Password : ${accounts[index].password} | Mail : ${accounts[index].mail} | Mail Password : ${accounts[index].mailPassword} | Rank : ${accounts[index].rank} | Date of Birth : ${accounts[index].dob}"));
+                                  "Rank : ${accounts[index].rank} | Username : ${accounts[index].username} | Password : ${accounts[index].password} | Mail : ${accounts[index].mail} | Mail Password : ${accounts[index].mailPassword} | Date of Birth : ${accounts[index].dob}"));
                         },
                         icon: const Icon(Icons.copy_outlined)),
                   ),
@@ -270,6 +156,90 @@ class _AccountsPageState extends State<AccountsPage> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Future<dynamic> _addAccountSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: _accountFormView(context, 0, 0),
+        );
+      },
+    );
+  }
+
+  Form _accountFormView(BuildContext context, int choice, int index) {
+    return Form(
+      key: _key,
+      child: ListView(
+        children: [
+          TextFormField(
+              validator: FormFieldValidator().isNotEmpty,
+              controller: _usernameController,
+              decoration: InputDecoration(labelText: LanguageItems.username)),
+          TextFormField(
+              validator: FormFieldValidator().isNotEmpty,
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: LanguageItems.password)),
+          TextFormField(
+              validator: FormFieldValidator().isNotEmpty,
+              controller: _mailController,
+              decoration: InputDecoration(labelText: LanguageItems.mail)),
+          TextFormField(
+              validator: FormFieldValidator().isNotEmpty,
+              controller: _mailPasswordController,
+              decoration: InputDecoration(labelText: LanguageItems.mailPassword)),
+          TextFormField(
+              validator: FormFieldValidator().isNotEmpty,
+              controller: _dobController,
+              decoration: InputDecoration(labelText: LanguageItems.dob)),
+          DropdownButtonFormField(
+            value: _rank.isNotEmpty ? _rank : null,
+            hint: const Text("Rank"),
+            validator: FormFieldValidator().isNotEmpty,
+            items: [
+              DropdownMenuItem(value: "Unranked", child: Text(LanguageItems.unranked)),
+              DropdownMenuItem(value: "Diamond-1", child: Text(LanguageItems.diamond1)),
+              DropdownMenuItem(value: "Diamond-2", child: Text(LanguageItems.diamond2)),
+              DropdownMenuItem(value: "Diamond-3", child: Text(LanguageItems.diamond3)),
+              DropdownMenuItem(value: "Ascendant-1", child: Text(LanguageItems.ascendant1)),
+              DropdownMenuItem(value: "Ascendant-2", child: Text(LanguageItems.ascendant2)),
+              DropdownMenuItem(value: "Ascendant-3", child: Text(LanguageItems.ascendant3)),
+              DropdownMenuItem(value: "Immortal-1", child: Text(LanguageItems.immortal1)),
+              DropdownMenuItem(value: "Immortal-2", child: Text(LanguageItems.immortal2)),
+              DropdownMenuItem(value: "Immortal-3", child: Text(LanguageItems.immortal3)),
+              DropdownMenuItem(value: "Radiant", child: Text(LanguageItems.radiant)),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _rank = value ?? "";
+              });
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(22.0),
+            child: SizedBox(
+              height: 40,
+              child: ElevatedButton.icon(
+                  onPressed: () {
+                    if (_key.currentState?.validate() ?? false) {
+                      if (choice == 0) {
+                        saveListItems();
+                      } else if (choice == 1) {
+                        updateListItems(index);
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.save_outlined),
+                  label: Text(LanguageItems.save)),
+            ),
+          )
+        ],
       ),
     );
   }

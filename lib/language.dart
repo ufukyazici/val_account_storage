@@ -17,4 +17,5 @@ class LanguageItems {
   static String immortal2 = "Immortal-2";
   static String immortal3 = "Immortal-3";
   static String radiant = "Radiant";
+  static String unranked = "Unranked";
 }
