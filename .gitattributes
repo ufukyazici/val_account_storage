@@ -1,7 +1,1 @@
-# Do not detect
-*.cc -linguist-detectable
-*.cpp -linguist-detectable
-
-# Detect
-*.dart linguist-detectable
 *.dart linguist-language=Dart
