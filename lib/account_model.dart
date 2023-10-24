@@ -6,13 +6,7 @@ class AccountModel {
   String? rank;
   String? dob;
 
-  AccountModel(
-      {this.username,
-      this.password,
-      this.mail,
-      this.mailPassword,
-      this.rank,
-      this.dob});
+  AccountModel({this.username, this.password, this.mail, this.mailPassword, this.rank, this.dob});
 
   AccountModel.fromJson(Map<String, dynamic> json) {
     username = json['username'];
