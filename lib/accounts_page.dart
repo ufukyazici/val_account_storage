@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:account_storage/account_model.dart';
 import 'package:account_storage/accounts_cache.dart';
 import 'package:account_storage/language.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:open_file/open_file.dart';
 
 class AccountsPage extends StatefulWidget {
   const AccountsPage({super.key});
@@ -19,6 +22,7 @@ class _AccountsPageState extends State<AccountsPage> {
   final TextEditingController _mailController = TextEditingController();
   final TextEditingController _mailPasswordController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
+  final localAppData = Platform.environment['LOCALAPPDATA'];
   List<AccountModel> accounts = [];
   final GlobalKey<FormState> _key = GlobalKey();
 
@@ -39,6 +43,10 @@ class _AccountsPageState extends State<AccountsPage> {
     accountCacheManager.saveAccounts(accounts);
     resetControllers();
     Navigator.of(context).pop();
+  }
+
+  Future<void> openClient() async {
+    await OpenFile.open("C:/Riot Games/Riot Client/RiotClientServices.exe");
   }
 
   void updateListItems(int index) {
@@ -104,9 +112,27 @@ class _AccountsPageState extends State<AccountsPage> {
               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
               child: ListTile(
                 leading: Image.asset("assets/png/${accounts[index].rank}.png"),
-                title: Text("${accounts[index].username}"),
-                subtitle: Text("${accounts[index].mail}"),
+                title: GestureDetector(
+                  child: Text("${accounts[index].username}"),
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: "${accounts[index].username}"));
+                  },
+                ),
+                subtitle: GestureDetector(
+                  child: Text("${accounts[index].mail}"),
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: "${accounts[index].password}"));
+                  },
+                ),
                 trailing: Wrap(children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: IconButton(
+                        onPressed: () {
+                          openClient();
+                        },
+                        icon: const Icon(Icons.login_outlined)),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton(
