@@ -18,4 +18,6 @@ class LanguageItems {
   static String immortal3 = "Immortal-3";
   static String radiant = "Radiant";
   static String unranked = "Unranked";
+  static String naRegion = "North America";
+  static String euRegion = "Europe";
 }

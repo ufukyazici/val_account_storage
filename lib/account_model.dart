@@ -5,8 +5,9 @@ class AccountModel {
   String? mailPassword;
   String? rank;
   String? dob;
+  String? region;
 
-  AccountModel({this.username, this.password, this.mail, this.mailPassword, this.rank, this.dob});
+  AccountModel({this.username, this.password, this.mail, this.mailPassword, this.rank, this.dob, this.region});
 
   AccountModel.fromJson(Map<String, dynamic> json) {
     username = json['username'];
@@ -15,6 +16,7 @@ class AccountModel {
     mailPassword = json['mailPassword'];
     rank = json['rank'];
     dob = json['dob'];
+    region = json['region'];
   }
 
   Map<String, dynamic> toJson() {
@@ -25,6 +27,7 @@ class AccountModel {
     data['mailPassword'] = mailPassword;
     data['rank'] = rank;
     data['dob'] = dob;
+    data['region'] = region;
     return data;
   }
 }

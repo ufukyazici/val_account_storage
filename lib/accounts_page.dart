@@ -17,6 +17,7 @@ class AccountsPage extends StatefulWidget {
 class _AccountsPageState extends State<AccountsPage> {
   late final AccountsSharedManager accountCacheManager;
   String _rank = "";
+  String _region = "";
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _mailController = TextEditingController();
@@ -39,7 +40,8 @@ class _AccountsPageState extends State<AccountsPage> {
         mail: _mailController.text,
         mailPassword: _mailPasswordController.text,
         dob: _dobController.text,
-        rank: _rank));
+        rank: _rank,
+        region: _region));
     accountCacheManager.saveAccounts(accounts);
     resetControllers();
     Navigator.of(context).pop();
@@ -56,6 +58,7 @@ class _AccountsPageState extends State<AccountsPage> {
     accounts[index].mailPassword = _mailPasswordController.text;
     accounts[index].dob = _dobController.text;
     accounts[index].rank = _rank;
+    accounts[index].region = _region;
     accountCacheManager.saveAccounts(accounts);
     resetControllers();
     Navigator.of(context).pop();
@@ -76,6 +79,7 @@ class _AccountsPageState extends State<AccountsPage> {
       _mailPasswordController.text = "";
       _dobController.text = "";
       _rank = "";
+      _region = "";
     });
   }
 
@@ -113,7 +117,7 @@ class _AccountsPageState extends State<AccountsPage> {
               child: ListTile(
                 leading: Image.asset("assets/png/${accounts[index].rank}.png"),
                 title: GestureDetector(
-                  child: Text("${accounts[index].username}"),
+                  child: Text("[${accounts[index].region ?? "No Region"}] ${accounts[index].username}"),
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: "${accounts[index].username}"));
                   },
@@ -143,6 +147,7 @@ class _AccountsPageState extends State<AccountsPage> {
                           _mailPasswordController.text = accounts[index].mailPassword ?? "";
                           _dobController.text = accounts[index].dob ?? "";
                           _rank = accounts[index].rank ?? "";
+                          _region = accounts[index].region ?? "";
                           showModalBottomSheet(
                             context: context,
                             shape: const RoundedRectangleBorder(
@@ -244,6 +249,20 @@ class _AccountsPageState extends State<AccountsPage> {
             onChanged: (value) {
               setState(() {
                 _rank = value ?? "";
+              });
+            },
+          ),
+          DropdownButtonFormField(
+            value: _region.isNotEmpty ? _region : null,
+            hint: const Text("Region"),
+            validator: FormFieldValidator().isNotEmpty,
+            items: [
+              DropdownMenuItem(value: "NA", child: Text(LanguageItems.naRegion)),
+              DropdownMenuItem(value: "EU", child: Text(LanguageItems.euRegion))
+            ],
+            onChanged: (value) {
+              setState(() {
+                _region = value ?? "";
               });
             },
           ),
