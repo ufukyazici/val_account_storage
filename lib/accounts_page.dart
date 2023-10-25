@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:account_storage/account_model.dart';
 import 'package:account_storage/accounts_cache.dart';
 import 'package:account_storage/language.dart';
@@ -23,7 +21,6 @@ class _AccountsPageState extends State<AccountsPage> {
   final TextEditingController _mailController = TextEditingController();
   final TextEditingController _mailPasswordController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  final localAppData = Platform.environment['LOCALAPPDATA'];
   List<AccountModel> accounts = [];
   final GlobalKey<FormState> _key = GlobalKey();
 
@@ -123,7 +120,7 @@ class _AccountsPageState extends State<AccountsPage> {
                   },
                 ),
                 subtitle: GestureDetector(
-                  child: Text("${accounts[index].mail}"),
+                  child: Text(accounts[index].mail!.isNotEmpty ? "${accounts[index].mail}" : "Mail not found."),
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: "${accounts[index].password}"));
                   },
@@ -134,8 +131,9 @@ class _AccountsPageState extends State<AccountsPage> {
                     child: IconButton(
                         onPressed: () {
                           openClient();
+                          Clipboard.setData(ClipboardData(text: "${accounts[index].username}"));
                         },
-                        icon: const Icon(Icons.login_outlined)),
+                        icon: const Icon(Icons.play_circle_outline)),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -217,18 +215,10 @@ class _AccountsPageState extends State<AccountsPage> {
               validator: FormFieldValidator().isNotEmpty,
               controller: _passwordController,
               decoration: InputDecoration(labelText: LanguageItems.password)),
+          TextFormField(controller: _mailController, decoration: InputDecoration(labelText: LanguageItems.mail)),
           TextFormField(
-              validator: FormFieldValidator().isNotEmpty,
-              controller: _mailController,
-              decoration: InputDecoration(labelText: LanguageItems.mail)),
-          TextFormField(
-              validator: FormFieldValidator().isNotEmpty,
-              controller: _mailPasswordController,
-              decoration: InputDecoration(labelText: LanguageItems.mailPassword)),
-          TextFormField(
-              validator: FormFieldValidator().isNotEmpty,
-              controller: _dobController,
-              decoration: InputDecoration(labelText: LanguageItems.dob)),
+              controller: _mailPasswordController, decoration: InputDecoration(labelText: LanguageItems.mailPassword)),
+          TextFormField(controller: _dobController, decoration: InputDecoration(labelText: LanguageItems.dob)),
           DropdownButtonFormField(
             value: _rank.isNotEmpty ? _rank : null,
             hint: const Text("Rank"),
