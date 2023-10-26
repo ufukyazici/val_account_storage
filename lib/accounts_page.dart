@@ -166,7 +166,7 @@ class _AccountsPageState extends State<AccountsPage> {
                         onPressed: () {
                           Clipboard.setData(ClipboardData(
                               text:
-                                  "Rank : ${accounts[index].rank} | Username : ${accounts[index].username} | Password : ${accounts[index].password} | Mail : ${accounts[index].mail} | Mail Password : ${accounts[index].mailPassword} | Date of Birth : ${accounts[index].dob}"));
+                                  "[${accounts[index].region}] | Rank : ${accounts[index].rank} | Username : ${accounts[index].username} | Password : ${accounts[index].password} | Mail : ${accounts[index].mail} | Mail Password : ${accounts[index].mailPassword} | Date of Birth : ${accounts[index].dob}"));
                         },
                         icon: const Icon(Icons.copy_outlined)),
                   ),
